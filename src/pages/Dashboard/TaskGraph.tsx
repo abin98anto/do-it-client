@@ -12,64 +12,47 @@ const TaskGraph: React.FC<TaskGraphProps> = ({ completed, pending }) => {
 
   useEffect(() => {
     if (!canvasRef.current) return;
-
     const canvas = canvasRef.current;
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
-
-    // Clear canvas
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-    // No data case
     if (total === 0) {
       drawEmptyPieChart(ctx, canvas.width, canvas.height);
       return;
     }
-
-    // Draw pie chart
     const centerX = canvas.width / 2;
     const centerY = canvas.height / 2;
     const radius = Math.min(centerX, centerY) - 10;
-
-    // Completed tasks slice
     const completedAngle = (completed / total) * 2 * Math.PI;
     ctx.beginPath();
     ctx.moveTo(centerX, centerY);
     ctx.arc(centerX, centerY, radius, 0, completedAngle);
-    ctx.fillStyle = "#4caf50"; // success-color
+    ctx.fillStyle = "#4caf50";
     ctx.fill();
-
-    // Pending tasks slice
     ctx.beginPath();
     ctx.moveTo(centerX, centerY);
     ctx.arc(centerX, centerY, radius, completedAngle, 2 * Math.PI);
-    ctx.fillStyle = "#ff9800"; // warning-color
+    ctx.fillStyle = "#ff9800";
     ctx.fill();
-
-    // Draw a white circle in the middle for donut effect
     ctx.beginPath();
     ctx.arc(centerX, centerY, radius * 0.6, 0, 2 * Math.PI);
     ctx.fillStyle = "white";
     ctx.fill();
-
-    // Add percentages in the middle
     const completedPercentage = Math.round((completed / total) * 100);
     const pendingPercentage = 100 - completedPercentage;
-
     ctx.font = "bold 14px Inter, sans-serif";
-    ctx.fillStyle = "#2c3e50"; // heading-color
+    ctx.fillStyle = "#2c3e50";
     ctx.textAlign = "center";
     ctx.textBaseline = "middle";
-
     if (completedPercentage > 0) {
       ctx.fillText(`${completedPercentage}%`, centerX, centerY - 10);
       ctx.font = "10px Inter, sans-serif";
-      ctx.fillStyle = "#757575"; // text-muted
+      ctx.fillStyle = "#757575";
       ctx.fillText("Completed", centerX, centerY + 10);
     } else {
       ctx.fillText(`${pendingPercentage}%`, centerX, centerY - 10);
       ctx.font = "10px Inter, sans-serif";
-      ctx.fillStyle = "#757575"; // text-muted
+      ctx.fillStyle = "#757575";
       ctx.fillText("Pending", centerX, centerY + 10);
     }
   }, [completed, pending, total]);

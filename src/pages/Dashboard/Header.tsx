@@ -3,7 +3,6 @@ import "./Header.scss";
 
 const Header: React.FC = () => {
   const handleLogout = () => {
-    // Handle logout logic here
     console.log("Logging out");
   };
 

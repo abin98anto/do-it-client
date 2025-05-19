@@ -1,7 +1,11 @@
-import React, { useState, useEffect } from "react";
+"use client";
+
+import type React from "react";
+import { useState, useEffect } from "react";
 import Header from "./Header";
 import TaskGraph from "./TaskGraph";
 import TaskList from "./TaskList";
+import TaskModal from "./TaskModal";
 import "./Dashboard.scss";
 
 interface Task {
@@ -16,56 +20,48 @@ const Dashboard: React.FC = () => {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [isMobile, setIsMobile] = useState<boolean>(false);
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
-  // Check if screen is mobile
   useEffect(() => {
     const checkScreenSize = () => {
       setIsMobile(window.innerWidth < 768);
     };
-
-    // Initial check
     checkScreenSize();
-
-    // Add event listener for window resize
     window.addEventListener("resize", checkScreenSize);
-
-    // Clean up
     return () => {
       window.removeEventListener("resize", checkScreenSize);
     };
   }, []);
 
-  // Mock fetch tasks - replace with actual API call
   useEffect(() => {
-    // Simulating API call to fetch tasks
     setTimeout(() => {
       const mockTasks: Task[] = [
         {
           id: "1",
           title: "Complete project documentation",
           description: "Finish all sections of the documentation",
-          dueDate: new Date(2025, 4, 22), // Future date
+          dueDate: new Date(2025, 4, 22),
           status: "pending",
         },
         {
           id: "2",
           title: "Prepare presentation",
           description: "Create slides for the client meeting",
-          dueDate: new Date(2025, 4, 18), // Past date
+          dueDate: new Date(2025, 4, 18),
           status: "pending",
         },
         {
           id: "3",
           title: "Code review",
           description: "Review pull requests from team members",
-          dueDate: new Date(2025, 4, 25), // Future date
+          dueDate: new Date(2025, 4, 25),
           status: "pending",
         },
         {
           id: "4",
           title: "Update dependencies",
           description: "Update all npm packages to latest versions",
-          dueDate: new Date(2025, 4, 15), // Past date
+          dueDate: new Date(2025, 4, 15),
           status: "pending",
         },
         {
@@ -88,7 +84,6 @@ const Dashboard: React.FC = () => {
     }, 1000);
   }, []);
 
-  // Calculate stats for the graph
   const completedTasksCount = tasks.filter(
     (task) => task.status === "completed"
   ).length;
@@ -96,13 +91,34 @@ const Dashboard: React.FC = () => {
     (task) => task.status === "pending"
   ).length;
 
-  // Filter out deleted tasks and get only pending tasks
   const pendingTasks = tasks.filter((task) => task.status === "pending");
 
   const handleAddNewTask = () => {
-    // Handle adding a new task
-    console.log("Adding new task");
-    // This would open a modal or navigate to a new task form
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+  };
+
+  const handleSaveTask = (newTask: {
+    title: string;
+    description: string;
+    dueDate: Date;
+    status: string;
+  }) => {
+    // Generate a unique ID for the new task
+    const newTaskWithId = {
+      ...newTask,
+      id: Date.now().toString(),
+      status: newTask.status as "pending" | "completed" | "deleted",
+    };
+
+    // Add the new task to the tasks array
+    setTasks([...tasks, newTaskWithId]);
+
+    // Close the modal
+    setIsModalOpen(false);
   };
 
   return (
@@ -110,9 +126,6 @@ const Dashboard: React.FC = () => {
       <Header />
 
       <div className={`dashboard-content ${isMobile ? "mobile" : ""}`}>
-        {/* Desktop layout: sidebar and main content side by side */}
-        {/* Mobile layout: main content first, then sidebar underneath */}
-
         <div className="dashboard-sidebar">
           {!isMobile && (
             <button className="add-task-btn" onClick={handleAddNewTask}>
@@ -144,6 +157,12 @@ const Dashboard: React.FC = () => {
           +
         </button>
       )}
+
+      <TaskModal
+        isOpen={isModalOpen}
+        onClose={handleCloseModal}
+        onSave={handleSaveTask}
+      />
     </div>
   );
 };
