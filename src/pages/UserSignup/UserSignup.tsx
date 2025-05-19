@@ -32,7 +32,7 @@ const UserSignup: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setErrors({});
-    
+
     const result = signupSchema.safeParse({
       fullName,
       email,
@@ -74,6 +74,9 @@ const UserSignup: React.FC = () => {
 
   return (
     <div className="user-signup-container">
+      <div className="user-signup-heading">
+        <h1>do-it.</h1>
+      </div>
       <div className="user-signup-card">
         <h2 className="user-signup-title">Sign Up</h2>
         <form onSubmit={handleSubmit} className="user-signup-form">

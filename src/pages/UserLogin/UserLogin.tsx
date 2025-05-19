@@ -25,31 +25,29 @@ const UserLogin: React.FC = () => {
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setErrors({});
-
-    const result = loginSchema.safeParse({ email, password });
-
-    if (!result.success) {
-      const newErrors: typeof errors = {};
-      result.error.issues.forEach((issue) => {
-        newErrors[issue.path[0] as keyof typeof errors] = issue.message;
-      });
-      setErrors(newErrors);
-      showSnackbar(
-        newErrors[Object.keys(newErrors)[0] as keyof typeof errors] as string,
-        "error"
-      );
-      return;
-    }
-
-    setIsLoading(true);
     try {
-      const response = await dispatch(
-        login({ email, password, role: "user" })
-      ).unwrap();
+      e.preventDefault();
+      setErrors({});
+
+      const result = loginSchema.safeParse({ email, password });
+
+      if (!result.success) {
+        const newErrors: typeof errors = {};
+        result.error.issues.forEach((issue) => {
+          newErrors[issue.path[0] as keyof typeof errors] = issue.message;
+        });
+        setErrors(newErrors);
+        showSnackbar(
+          newErrors[Object.keys(newErrors)[0] as keyof typeof errors] as string,
+          "error"
+        );
+        return;
+      }
+
+      setIsLoading(true);
+      const response = await dispatch(login({ email, password })).unwrap();
       if (response.success) {
-        navigate("/");
+        navigate("/dashboard");
         resetForm();
       }
     } catch (error: any) {
@@ -61,6 +59,9 @@ const UserLogin: React.FC = () => {
 
   return (
     <div className="user-login-container">
+      <div className="user-login-heading">
+        <h1>do-it.</h1>
+      </div>
       <div className="user-login-card">
         <h2 className="user-login-title">Login</h2>
         <form onSubmit={handleSubmit} className="user-login-form">

@@ -27,11 +27,19 @@ $success: #22c55e;
 
 .user-signup-container {
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  justify-content: space-evenly;
   align-items: center;
-  min-height: 100vh;
+  min-height: 96vh;
   background: linear-gradient(180deg, #030303 0%, $background 100%);
   padding: 1rem;
+}
+
+.user-signup-heading h1 {
+  color: white;
+  font-family: "Dancing Script", cursive;
+  font-weight: 800;
+  font-size: 4rem;
 }
 
 .user-signup-card {

@@ -5,14 +5,13 @@ import axiosInstance from "../../config/axiosInstance";
 export interface LoginData {
   email: string;
   password: string;
-  role: string;
 }
 
 export const login = createAsyncThunk(
   "user/login",
   async (userData: LoginData, { rejectWithValue }) => {
     try {
-      const result = await axiosInstance.post("/login", { userData });
+      const result = await axiosInstance.post("/login", userData);
       return result.data;
     } catch (error) {
       console.log("error in user login thunk", error);
