@@ -9,9 +9,9 @@ interface TaskItemProps {
 }
 
 const TaskItem: React.FC<TaskItemProps> = ({ title, description, dueDate }) => {
-  const isPastDue = new Date() > dueDate;
+  const due = new Date(dueDate);
+  const isPastDue = new Date() > due;
 
-  // Format date in a user-friendly way
   const formatDate = (date: Date) => {
     return date.toLocaleDateString("en-US", {
       month: "short",
@@ -23,11 +23,15 @@ const TaskItem: React.FC<TaskItemProps> = ({ title, description, dueDate }) => {
   return (
     <div className={`task-item ${isPastDue ? "past-due" : ""}`}>
       <div className="task-content">
-        <h3 className="task-title">{title}</h3>
-        <p className="task-description">{description}</p>
+        <h3 className={`task-title ${isPastDue ? "past-due-title" : ""}`}>
+          {title}
+        </h3>
+        <p className={`task-description  ${isPastDue ? "past-due-desc" : ""}`}>
+          {description}
+        </p>
         <div className="task-meta">
           <span className="due-date">
-            Due: {formatDate(dueDate)}
+            Due: {formatDate(due)}
             {isPastDue && <span className="overdue-label">OVERDUE</span>}
           </span>
         </div>

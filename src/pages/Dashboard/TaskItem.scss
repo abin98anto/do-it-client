@@ -64,6 +64,14 @@
   flex-wrap: wrap;
 }
 
+.past-due-title {
+  color: white;
+}
+
+.past-due-desc {
+  color: $bg-color;
+}
+
 .overdue-label {
   background-color: $danger-color;
   color: white;

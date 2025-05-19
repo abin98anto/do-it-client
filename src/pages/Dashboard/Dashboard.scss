@@ -16,6 +16,7 @@
   padding: 24px;
   gap: 24px;
   overflow: hidden;
+  background-color: #1f2937;
 
   &.mobile {
     flex-direction: column-reverse;
@@ -42,12 +43,14 @@
   flex-direction: column;
   gap: 16px;
   padding: 0 4px;
+  overflow-y: auto;
+  scrollbar-width: none;
 
   h2 {
     margin: 0 0 16px 0;
     font-size: 1.5rem;
     font-weight: 600;
-    color: $heading-color;
+    color: $bg-light;
   }
 }
 

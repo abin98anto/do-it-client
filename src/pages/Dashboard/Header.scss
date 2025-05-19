@@ -5,8 +5,8 @@
   justify-content: space-between;
   align-items: center;
   padding: 16px 24px;
-  background-color: white;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  background-color: #1f2937;
+  // box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
   height: 64px;
 }
 
@@ -28,15 +28,18 @@
 .app-title {
   margin: 0;
   font-size: 1.8rem;
-  font-weight: 700;
+  // font-weight: 700;
   color: $primary-color;
   letter-spacing: -0.5px;
+  font-family: "Dancing Script", cursive;
+  font-weight: 800;
+  font-size: 3rem;
 }
 
 .logout-button {
   background-color: transparent;
   border: 1px solid $border-color;
-  color: $text-color;
+  color: white;
   padding: 8px 16px;
   border-radius: 8px;
   font-size: 0.9rem;

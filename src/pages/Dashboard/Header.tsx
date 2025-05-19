@@ -1,9 +1,12 @@
 import React from "react";
 import "./Header.scss";
+import { useAppDispatch } from "../../hooks/reduxHooks";
+import { logout } from "../../redux/thunks/UserAuthServices";
 
 const Header: React.FC = () => {
-  const handleLogout = () => {
-    console.log("Logging out");
+  const dispatch = useAppDispatch();
+  const handleLogout = async () => {
+    await dispatch(logout()).unwrap();
   };
 
   return (

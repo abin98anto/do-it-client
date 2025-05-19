@@ -3,14 +3,6 @@ import TaskItem from "./TaskItem";
 import "./TaskList.scss";
 import type ITask from "../../entitites/ITask";
 
-// interface Task {
-//   id: string;
-//   title: string;
-//   description: string;
-//   dueDate: Date;
-//   status: "pending" | "completed" | "deleted";
-// }
-
 interface TaskListProps {
   tasks: ITask[];
 }
