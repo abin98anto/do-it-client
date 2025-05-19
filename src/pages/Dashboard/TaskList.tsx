@@ -1,17 +1,18 @@
 import React from "react";
 import TaskItem from "./TaskItem";
 import "./TaskList.scss";
+import type ITask from "../../entitites/ITask";
 
-interface Task {
-  id: string;
-  title: string;
-  description: string;
-  dueDate: Date;
-  status: "pending" | "completed" | "deleted";
-}
+// interface Task {
+//   id: string;
+//   title: string;
+//   description: string;
+//   dueDate: Date;
+//   status: "pending" | "completed" | "deleted";
+// }
 
 interface TaskListProps {
-  tasks: Task[];
+  tasks: ITask[];
 }
 
 const TaskList: React.FC<TaskListProps> = ({ tasks }) => {
@@ -27,8 +28,8 @@ const TaskList: React.FC<TaskListProps> = ({ tasks }) => {
     <div className="task-list">
       {tasks.map((task) => (
         <TaskItem
-          key={task.id}
-          id={task.id}
+          key={task._id}
+          id={task._id as string}
           title={task.title}
           description={task.description}
           dueDate={task.dueDate}

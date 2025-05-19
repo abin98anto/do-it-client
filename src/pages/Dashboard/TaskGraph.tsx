@@ -11,35 +11,37 @@ const TaskGraph: React.FC<TaskGraphProps> = ({ completed, pending }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
-    if (!canvasRef.current) return;
+    if (!canvasRef.current || total === 0) return;
     const canvas = canvasRef.current;
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    if (total === 0) {
-      drawEmptyPieChart(ctx, canvas.width, canvas.height);
-      return;
-    }
+
     const centerX = canvas.width / 2;
     const centerY = canvas.height / 2;
     const radius = Math.min(centerX, centerY) - 10;
     const completedAngle = (completed / total) * 2 * Math.PI;
+
     ctx.beginPath();
     ctx.moveTo(centerX, centerY);
     ctx.arc(centerX, centerY, radius, 0, completedAngle);
     ctx.fillStyle = "#4caf50";
     ctx.fill();
+
     ctx.beginPath();
     ctx.moveTo(centerX, centerY);
     ctx.arc(centerX, centerY, radius, completedAngle, 2 * Math.PI);
     ctx.fillStyle = "#ff9800";
     ctx.fill();
+
     ctx.beginPath();
     ctx.arc(centerX, centerY, radius * 0.6, 0, 2 * Math.PI);
     ctx.fillStyle = "white";
     ctx.fill();
+
     const completedPercentage = Math.round((completed / total) * 100);
     const pendingPercentage = 100 - completedPercentage;
+
     ctx.font = "bold 14px Inter, sans-serif";
     ctx.fillStyle = "#2c3e50";
     ctx.textAlign = "center";
@@ -57,28 +59,16 @@ const TaskGraph: React.FC<TaskGraphProps> = ({ completed, pending }) => {
     }
   }, [completed, pending, total]);
 
-  const drawEmptyPieChart = (
-    ctx: CanvasRenderingContext2D,
-    width: number,
-    height: number
-  ) => {
-    const centerX = width / 2;
-    const centerY = height / 2;
-    const radius = Math.min(centerX, centerY) - 10;
-
-    // Draw empty circle
-    ctx.beginPath();
-    ctx.arc(centerX, centerY, radius, 0, 2 * Math.PI);
-    ctx.fillStyle = "#f0f3f8"; // bg-light
-    ctx.fill();
-
-    // Draw text
-    ctx.font = "bold 14px Inter, sans-serif";
-    ctx.fillStyle = "#757575"; // text-muted
-    ctx.textAlign = "center";
-    ctx.textBaseline = "middle";
-    ctx.fillText("No tasks yet", centerX, centerY);
-  };
+  if (total === 0) {
+    return (
+      <div className="task-graph placeholder">
+        <div className="placeholder-content">
+          <span className="placeholder-icon">📋</span>
+          <p className="placeholder-text">No tasks available</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="task-graph">

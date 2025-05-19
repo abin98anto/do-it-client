@@ -2,16 +2,13 @@ import type React from "react";
 import { useState } from "react";
 import "./TaskModal.scss";
 import { type TaskStatus } from "../../entitites/misc/TaskStatus";
+import type ITask from "../../entitites/ITask";
+import { useAppSelector } from "../../hooks/reduxHooks";
 
 interface TaskModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onSave: (task: {
-    title: string;
-    description: string;
-    dueDate: Date;
-    status: string;
-  }) => void;
+  onSave: (task: ITask) => void;
 }
 
 const TaskModal: React.FC<TaskModalProps> = ({ isOpen, onClose, onSave }) => {
@@ -21,6 +18,8 @@ const TaskModal: React.FC<TaskModalProps> = ({ isOpen, onClose, onSave }) => {
     new Date().toISOString().split("T")[0]
   );
   const [status, setStatus] = useState<TaskStatus>("pending");
+  const { userInfo } = useAppSelector((state) => state.user);
+  const userId = userInfo?._id as string;
 
   if (!isOpen) return null;
 
@@ -30,6 +29,7 @@ const TaskModal: React.FC<TaskModalProps> = ({ isOpen, onClose, onSave }) => {
 
     onSave({
       title,
+      userId,
       description,
       dueDate: new Date(dueDate),
       status,

@@ -7,17 +7,18 @@ import TaskGraph from "./TaskGraph";
 import TaskList from "./TaskList";
 import TaskModal from "./TaskModal";
 import "./Dashboard.scss";
+import type ITask from "../../entitites/ITask";
 
-interface Task {
-  id: string;
-  title: string;
-  description: string;
-  dueDate: Date;
-  status: "pending" | "completed" | "deleted";
-}
+// interface Task {
+//   id: string;
+//   title: string;
+//   description: string;
+//   dueDate: Date;
+//   status: "pending" | "completed" | "deleted";
+// }
 
 const Dashboard: React.FC = () => {
-  const [tasks, setTasks] = useState<Task[]>([]);
+  const [tasks, setTasks] = useState<ITask[] | []>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [isMobile, setIsMobile] = useState<boolean>(false);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
@@ -35,49 +36,49 @@ const Dashboard: React.FC = () => {
 
   useEffect(() => {
     setTimeout(() => {
-      const mockTasks: Task[] = [
-        {
-          id: "1",
-          title: "Complete project documentation",
-          description: "Finish all sections of the documentation",
-          dueDate: new Date(2025, 4, 22),
-          status: "pending",
-        },
-        {
-          id: "2",
-          title: "Prepare presentation",
-          description: "Create slides for the client meeting",
-          dueDate: new Date(2025, 4, 18),
-          status: "pending",
-        },
-        {
-          id: "3",
-          title: "Code review",
-          description: "Review pull requests from team members",
-          dueDate: new Date(2025, 4, 25),
-          status: "pending",
-        },
-        {
-          id: "4",
-          title: "Update dependencies",
-          description: "Update all npm packages to latest versions",
-          dueDate: new Date(2025, 4, 15),
-          status: "pending",
-        },
-        {
-          id: "5",
-          title: "Deleted task",
-          description: "This should not appear",
-          dueDate: new Date(2025, 4, 20),
-          status: "deleted",
-        },
-        {
-          id: "6",
-          title: "Deploy to production",
-          description: "Release the new version",
-          dueDate: new Date(2025, 4, 30),
-          status: "completed",
-        },
+      const mockTasks: ITask[] = [
+        // {
+        //   id: "1",
+        //   title: "Complete project documentation",
+        //   description: "Finish all sections of the documentation",
+        //   dueDate: new Date(2025, 4, 22),
+        //   status: "pending",
+        // },
+        // {
+        //   id: "2",
+        //   title: "Prepare presentation",
+        //   description: "Create slides for the client meeting",
+        //   dueDate: new Date(2025, 4, 18),
+        //   status: "pending",
+        // },
+        // {
+        //   id: "3",
+        //   title: "Code review",
+        //   description: "Review pull requests from team members",
+        //   dueDate: new Date(2025, 4, 25),
+        //   status: "pending",
+        // },
+        // {
+        //   id: "4",
+        //   title: "Update dependencies",
+        //   description: "Update all npm packages to latest versions",
+        //   dueDate: new Date(2025, 4, 15),
+        //   status: "pending",
+        // },
+        // {
+        //   id: "5",
+        //   title: "Deleted task",
+        //   description: "This should not appear",
+        //   dueDate: new Date(2025, 4, 20),
+        //   status: "deleted",
+        // },
+        // {
+        //   id: "6",
+        //   title: "Deploy to production",
+        //   description: "Release the new version",
+        //   dueDate: new Date(2025, 4, 30),
+        //   status: "completed",
+        // },
       ];
       setTasks(mockTasks);
       setLoading(false);
@@ -101,23 +102,8 @@ const Dashboard: React.FC = () => {
     setIsModalOpen(false);
   };
 
-  const handleSaveTask = (newTask: {
-    title: string;
-    description: string;
-    dueDate: Date;
-    status: string;
-  }) => {
-    // Generate a unique ID for the new task
-    const newTaskWithId = {
-      ...newTask,
-      id: Date.now().toString(),
-      status: newTask.status as "pending" | "completed" | "deleted",
-    };
-
-    // Add the new task to the tasks array
-    setTasks([...tasks, newTaskWithId]);
-
-    // Close the modal
+  const handleSaveTask = (newTask: ITask) => {
+    setTasks([...tasks, newTask]);
     setIsModalOpen(false);
   };
 
