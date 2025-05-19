@@ -1,0 +1,130 @@
+@import "./variables.scss";
+
+.task-item {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background-color: white;
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 12px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  transition: transform 0.2s, box-shadow 0.2s;
+  aspect-ratio: 1 / 1; // Makes the item square
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
+  }
+
+  &.past-due {
+    background-color: rgba($danger-color, 0.05);
+    border-left: 4px solid $danger-color;
+  }
+}
+
+.task-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.task-title {
+  margin: 0 0 8px 0;
+  font-weight: 600;
+  color: $heading-color;
+  font-size: 1.125rem;
+}
+
+.task-description {
+  margin: 0 0 12px 0;
+  color: $text-color;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  //   -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+}
+
+.task-meta {
+  display: flex;
+  font-size: 0.8rem;
+  color: $text-muted;
+  margin-bottom: 16px;
+}
+
+.due-date {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.overdue-label {
+  background-color: $danger-color;
+  color: white;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 0.7rem;
+  font-weight: 600;
+}
+
+.task-actions {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  padding-top: 12px;
+  border-top: 1px solid $border-color;
+}
+
+.task-action {
+  background: none;
+  border: none;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  transition: all 0.2s;
+
+  &.complete-btn {
+    background-color: $bg-light;
+    color: $success-color;
+
+    &:hover {
+      background-color: $success-color;
+      color: white;
+    }
+  }
+
+  &.edit-btn {
+    background-color: $bg-light;
+    color: $warning-color;
+
+    &:hover {
+      background-color: $warning-color;
+      color: white;
+    }
+  }
+
+  &.delete-btn {
+    background-color: $bg-light;
+    color: $danger-color;
+
+    &:hover {
+      background-color: $danger-color;
+      color: white;
+    }
+  }
+
+  .icon {
+    font-size: 1.2rem;
+    line-height: 1;
+  }
+}

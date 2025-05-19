@@ -1,0 +1,22 @@
+@import "./variables.scss";
+
+.task-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 16px;
+  width: 100%;
+}
+
+.no-tasks {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 200px;
+  background-color: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  color: $text-muted;
+  font-size: 1.1rem;
+  font-style: italic;
+  grid-column: 1 / -1;
+}
