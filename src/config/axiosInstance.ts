@@ -1,7 +1,7 @@
 import axios, { type AxiosInstance } from "axios";
 
 const axiosInstance: AxiosInstance = axios.create({
-  baseURL: "https://do-it-server-jsod.onrender.com/api",
+  baseURL: "https://do-it-server-jsod.onrender.com",
   withCredentials: true,
   headers: {
     "Content-Type": "application/json",
