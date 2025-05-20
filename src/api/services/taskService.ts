@@ -18,13 +18,10 @@ export const updateTask = async (
   id: string,
   task: Partial<ITask>
 ): Promise<ITask> => {
-  const response = await axiosInstance.patch<TaskResponse>(
-    `/tasks/${id}`,
-    task
-  );
+  const response = await axiosInstance.put<TaskResponse>(`/task/${id}`, task);
   return response.data.data as ITask;
 };
 
 export const deleteTask = async (id: string): Promise<void> => {
-  await axiosInstance.delete<TaskResponse>(`/tasks/${id}`);
+  await axiosInstance.delete<TaskResponse>(`/task/${id}`);
 };

@@ -1,5 +1,3 @@
-"use client";
-
 import React, { useState, useEffect } from "react";
 import { useAppSelector } from "../../hooks/reduxHooks";
 import Header from "./Header";
@@ -7,6 +5,7 @@ import TaskGraph from "./TaskGraph";
 import TaskList from "./TaskList";
 import TaskModal from "./TaskModal";
 import { useTasks } from "../../hooks/useTasks";
+import { useSocket } from "../../hooks/useSocket";
 import "./Dashboard.scss";
 import type ITask from "../../entitites/ITask";
 
@@ -15,6 +14,8 @@ const Dashboard: React.FC = () => {
   const { tasks, loading, error, addTask } = useTasks(userInfo?._id as string);
   const [isMobile, setIsMobile] = useState<boolean>(false);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+
+  useSocket();
 
   useEffect(() => {
     const checkScreenSize = () => {

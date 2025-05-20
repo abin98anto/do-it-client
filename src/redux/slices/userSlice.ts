@@ -1,6 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { login, logout } from "../thunks/UserAuthServices";
 import type IUser from "../../entitites/IUser";
+import { setTasks } from "./taskSlice";
 
 interface IUserState {
   loading: boolean;
@@ -52,6 +53,7 @@ const userSlice = createSlice({
         state.loading = true;
       })
       .addCase(logout.fulfilled, (state) => {
+        setTasks([]);
         state.loading = false;
         state.userInfo = null;
         state.message = "";

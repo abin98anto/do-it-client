@@ -1,5 +1,6 @@
 import React from "react";
 import "./TaskItem.scss";
+import { updateTask, deleteTask } from "../../api/services/taskService";
 
 interface TaskItemProps {
   id: string;
@@ -8,7 +9,12 @@ interface TaskItemProps {
   dueDate: Date;
 }
 
-const TaskItem: React.FC<TaskItemProps> = ({ title, description, dueDate }) => {
+const TaskItem: React.FC<TaskItemProps> = ({
+  id,
+  title,
+  description,
+  dueDate,
+}) => {
   const due = new Date(dueDate);
   const isPastDue = new Date() > due;
 
@@ -18,6 +24,22 @@ const TaskItem: React.FC<TaskItemProps> = ({ title, description, dueDate }) => {
       day: "numeric",
       year: "numeric",
     });
+  };
+
+  const handleComplete = async () => {
+    try {
+      await updateTask(id, { status: "completed" });
+    } catch (error) {
+      console.error("Error completing task:", error);
+    }
+  };
+
+  const handleDelete = async () => {
+    try {
+      await deleteTask(id);
+    } catch (error) {
+      console.error("Error deleting task:", error);
+    }
   };
 
   return (
@@ -38,13 +60,21 @@ const TaskItem: React.FC<TaskItemProps> = ({ title, description, dueDate }) => {
       </div>
 
       <div className="task-actions">
-        <button className="task-action complete-btn" title="Mark as complete">
+        <button
+          className="task-action complete-btn"
+          title="Mark as complete"
+          onClick={handleComplete}
+        >
           <span className="icon">✓</span>
         </button>
         <button className="task-action edit-btn" title="Edit task">
           <span className="icon">✎</span>
         </button>
-        <button className="task-action delete-btn" title="Delete task">
+        <button
+          className="task-action delete-btn"
+          title="Delete task"
+          onClick={handleDelete}
+        >
           <span className="icon">×</span>
         </button>
       </div>
