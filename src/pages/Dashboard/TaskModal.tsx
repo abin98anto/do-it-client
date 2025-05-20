@@ -1,5 +1,5 @@
 import type React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import "./TaskModal.scss";
 import { type TaskStatus } from "../../entitites/misc/TaskStatus";
 import type ITask from "../../entitites/ITask";
@@ -8,10 +8,16 @@ import { useAppSelector } from "../../hooks/reduxHooks";
 interface TaskModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onSave: (task: ITask) => void;
+  onSave: (task: Omit<ITask, "createdAt" | "updatedAt">) => void;
+  task?: ITask | null;
 }
 
-const TaskModal: React.FC<TaskModalProps> = ({ isOpen, onClose, onSave }) => {
+const TaskModal: React.FC<TaskModalProps> = ({
+  isOpen,
+  onClose,
+  onSave,
+  task,
+}) => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [dueDate, setDueDate] = useState<string>(
@@ -21,6 +27,21 @@ const TaskModal: React.FC<TaskModalProps> = ({ isOpen, onClose, onSave }) => {
   const { userInfo } = useAppSelector((state) => state.user);
   const userId = userInfo?._id as string;
 
+  useEffect(() => {
+    if (task) {
+      setTitle(task.title);
+      setDescription(task.description || "");
+      const date = new Date(task.dueDate);
+      setDueDate(date.toISOString().split("T")[0]);
+      setStatus(task.status);
+    } else {
+      setTitle("");
+      setDescription("");
+      setDueDate(new Date().toISOString().split("T")[0]);
+      setStatus("pending");
+    }
+  }, [task, isOpen]);
+
   if (!isOpen) return null;
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -28,17 +49,13 @@ const TaskModal: React.FC<TaskModalProps> = ({ isOpen, onClose, onSave }) => {
     if (!title.trim() || !dueDate) return;
 
     onSave({
+      ...(task && { _id: task._id }),
       title,
       userId,
       description,
       dueDate: new Date(dueDate),
       status,
     });
-
-    setTitle("");
-    setDescription("");
-    setDueDate(new Date().toISOString().split("T")[0]);
-    setStatus("pending");
   };
 
   const handleOverlayClick = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -51,7 +68,7 @@ const TaskModal: React.FC<TaskModalProps> = ({ isOpen, onClose, onSave }) => {
     <div className="modal-overlay" onClick={handleOverlayClick}>
       <div className="modal-content">
         <div className="modal-header">
-          <h2>Add New Task</h2>
+          <h2>{task ? "Edit Task" : "Add New Task"}</h2>
         </div>
         <form onSubmit={handleSubmit}>
           <div className="form-group">
@@ -90,7 +107,7 @@ const TaskModal: React.FC<TaskModalProps> = ({ isOpen, onClose, onSave }) => {
 
           <div className="modal-footer">
             <button type="submit" className="button button-primary">
-              Save Task
+              {task ? "Update Task" : "Save Task"}
             </button>
             <button
               type="button"

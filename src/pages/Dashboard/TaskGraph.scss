@@ -96,3 +96,26 @@
   color: $text-muted;
   font-weight: 500;
 }
+
+/* Mobile styles */
+@media (max-width: 767px) {
+  .task-graph {
+    gap: 10px;
+  }
+
+  .task-stats {
+    padding-top: 10px;
+  }
+
+  .stat-item {
+    padding: 8px 0;
+  }
+
+  .stat-value {
+    font-size: 1.25rem;
+  }
+
+  .stat-label {
+    font-size: 0.7rem;
+  }
+}

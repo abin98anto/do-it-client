@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import "./TaskGraph.scss";
 
 interface TaskGraphProps {
@@ -9,9 +9,21 @@ interface TaskGraphProps {
 const TaskGraph: React.FC<TaskGraphProps> = ({ completed, pending }) => {
   const total = completed + pending;
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const [isMobile, setIsMobile] = useState<boolean>(false);
 
   useEffect(() => {
-    if (!canvasRef.current || total === 0) return;
+    const checkScreenSize = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    checkScreenSize();
+    window.addEventListener("resize", checkScreenSize);
+    return () => {
+      window.removeEventListener("resize", checkScreenSize);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!canvasRef.current || total === 0 || isMobile) return;
     const canvas = canvasRef.current;
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
@@ -57,7 +69,7 @@ const TaskGraph: React.FC<TaskGraphProps> = ({ completed, pending }) => {
       ctx.fillStyle = "#757575";
       ctx.fillText("Pending", centerX, centerY + 10);
     }
-  }, [completed, pending, total]);
+  }, [completed, pending, total, isMobile]);
 
   if (total === 0) {
     return (
@@ -72,25 +84,29 @@ const TaskGraph: React.FC<TaskGraphProps> = ({ completed, pending }) => {
 
   return (
     <div className="task-graph">
-      <div className="pie-chart-container">
-        <canvas
-          ref={canvasRef}
-          width={200}
-          height={200}
-          className="pie-chart"
-        ></canvas>
-      </div>
+      {!isMobile && (
+        <>
+          <div className="pie-chart-container">
+            <canvas
+              ref={canvasRef}
+              width={200}
+              height={200}
+              className="pie-chart"
+            ></canvas>
+          </div>
 
-      <div className="graph-legend">
-        <div className="legend-item">
-          <div className="color-indicator completed"></div>
-          <span>Completed</span>
-        </div>
-        <div className="legend-item">
-          <div className="color-indicator pending"></div>
-          <span>Pending</span>
-        </div>
-      </div>
+          <div className="graph-legend">
+            <div className="legend-item">
+              <div className="color-indicator completed"></div>
+              <span>Completed</span>
+            </div>
+            <div className="legend-item">
+              <div className="color-indicator pending"></div>
+              <span>Pending</span>
+            </div>
+          </div>
+        </>
+      )}
 
       <div className="task-stats">
         <div className="stat-item">

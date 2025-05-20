@@ -11,9 +11,12 @@ import type ITask from "../../entitites/ITask";
 
 const Dashboard: React.FC = () => {
   const { userInfo } = useAppSelector((state) => state.user);
-  const { tasks, loading, error, addTask } = useTasks(userInfo?._id as string);
+  const { tasks, loading, error, addTask, updateTaskItem } = useTasks(
+    userInfo?._id as string
+  );
   const [isMobile, setIsMobile] = useState<boolean>(false);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [editingTask, setEditingTask] = useState<ITask | null>(null);
 
   useSocket();
 
@@ -37,18 +40,30 @@ const Dashboard: React.FC = () => {
   const pendingTasks = tasks.filter((task) => task.status === "pending");
 
   const handleAddNewTask = () => {
+    setEditingTask(null);
+    setIsModalOpen(true);
+  };
+
+  const handleEditTask = (task: ITask) => {
+    setEditingTask(task);
     setIsModalOpen(true);
   };
 
   const handleCloseModal = () => {
     setIsModalOpen(false);
+    setEditingTask(null);
   };
 
   const handleSaveTask = async (
-    newTask: Omit<ITask, "_id" | "createdAt" | "updatedAt">
+    taskData: Omit<ITask, "createdAt" | "updatedAt">
   ) => {
-    await addTask({ ...newTask, userId: userInfo?._id as string });
+    if (editingTask) {
+      await updateTaskItem(editingTask._id as string, taskData);
+    } else {
+      await addTask({ ...taskData, userId: userInfo?._id as string });
+    }
     setIsModalOpen(false);
+    setEditingTask(null);
   };
 
   return (
@@ -76,7 +91,7 @@ const Dashboard: React.FC = () => {
           ) : error ? (
             <div className="error">Error: {error}</div>
           ) : (
-            <TaskList tasks={pendingTasks} />
+            <TaskList tasks={pendingTasks} onEditTask={handleEditTask} />
           )}
         </div>
       </div>
@@ -89,6 +104,7 @@ const Dashboard: React.FC = () => {
         isOpen={isModalOpen}
         onClose={handleCloseModal}
         onSave={handleSaveTask}
+        task={editingTask}
       />
     </div>
   );

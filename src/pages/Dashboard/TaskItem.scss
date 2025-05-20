@@ -136,3 +136,19 @@
     line-height: 1;
   }
 }
+
+/* Mobile styles */
+@media (max-width: 767px) {
+  .task-item {
+    aspect-ratio: auto;
+    padding: 12px;
+  }
+
+  .task-description {
+    display: none;
+  }
+
+  .task-meta {
+    margin-bottom: 8px;
+  }
+}

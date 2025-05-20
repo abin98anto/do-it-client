@@ -5,15 +5,12 @@ import type ITask from "../../entitites/ITask";
 
 interface TaskListProps {
   tasks: ITask[];
+  onEditTask?: (task: ITask) => void;
 }
 
-const TaskList: React.FC<TaskListProps> = ({ tasks }) => {
+const TaskList: React.FC<TaskListProps> = ({ tasks, onEditTask }) => {
   if (tasks.length === 0) {
-    return (
-      <div className="no-tasks">
-        <p>No pending tasks! 🎉</p>
-      </div>
-    );
+    return <div className="no-tasks">No tasks available.</div>;
   }
 
   return (
@@ -23,8 +20,10 @@ const TaskList: React.FC<TaskListProps> = ({ tasks }) => {
           key={task._id}
           id={task._id as string}
           title={task.title}
-          description={task.description}
-          dueDate={task.dueDate}
+          description={task.description || ""}
+          dueDate={new Date(task.dueDate)}
+          status={task.status}
+          onEdit={onEditTask}
         />
       ))}
     </div>
