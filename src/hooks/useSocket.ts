@@ -15,7 +15,7 @@ export const useSocket = () => {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    const socketInstance = io("http://localhost:5000", {
+    const socketInstance = io("https://do-it-server-jsod.onrender.com", {
       transports: ["websocket", "polling"],
     });
     setSocket(socketInstance);
